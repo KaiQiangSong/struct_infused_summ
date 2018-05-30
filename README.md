@@ -54,11 +54,11 @@ $ pip install pyrouge
 
 ## I Want to Generate Summaries..
 
-1. Clone this repo. Download this [TAR](https://drive.google.com/file/d/1dvauV4X6r8oYhohMhdjZr_bKv8XfxFO1/view?usp=sharing) file (`model_coling18.tar.gz`) containing vocabulary files and pretrained models. Move the TAR file to folder "AbstractiveSummarization" and uncompress.
+1. Clone this repo. Download this [TAR](https://drive.google.com/file/d/1dvauV4X6r8oYhohMhdjZr_bKv8XfxFO1/view?usp=sharing) file (`model_coling18.tar.gz`) containing vocabulary files and pretrained models. Move the TAR file to folder "struct_infused_summ" and uncompress.
     ```
-    $ git clone https://github.com/KaiQiangSong/AbstractiveSummarization/
-    $ mv model_coling18.tar.gz AbstractiveSummarization
-    $ cd AbstractiveSummarization
+    $ git clone https://github.com/KaiQiangSong/struct_infused_summ/
+    $ mv model_coling18.tar.gz struct_infused_summ
+    $ cd struct_infused_summ
     $ tar -xvzf model_coling18.tar.gz
     $ rm model_coling18.tar.gz
     ```
@@ -96,11 +96,6 @@ $ pip install pyrouge
     $ python toolkit.py ./train_data/summary_file.txt
     ```
     
-    ```
-    $ python toolkit.py ./valid_data/source_file.txt
-    $ python toolkit.py ./valid_data/summary_file.txt
-    ```
-   
     Adjust file names using below commands. `.Ndocument`, `.dfeature`, and `Nsummary` respectively contain the source sentences, structural features of source sentences, and summary sentences.
     ```
     $ cd ./train_data/
@@ -109,36 +104,40 @@ $ pip install pyrouge
     $ mv summary_file.txt.Ndocument train.Nsummary
     $ cd -
     ```    
+    
+3. Repeat the previous step for validation data, which are used for early stopping. `./valid_data` contain **toy** files.
     ```
+    $ python toolkit.py ./valid_data/source_file.txt
+    $ python toolkit.py ./valid_data/summary_file.txt
     $ cd ./valid_data/
     $ mv source_file.txt.Ndocument valid.Ndocument
     $ mv source_file.txt.feature valid.dfeature
     $ mv summary_file.txt.Ndocument valid.Nsummary
     $ cd -
-    ```  
-    
-3. Generate the model configuration file in the `./settings/` folder.
+    ```
+
+4. Generate the model configuration file in the `./settings/` folder.
     ```
     $ python genTrainDataSettings.py ./train_data/train ./valid_data/valid ./settings/my_train_settings
     ```
     
     After that, you need to modify the "dataset" field of the `options_loader.py` file to point to the new settings file: `'dataset':'settings/my_train_settings.json'`.
 
-4. Download the [GloVe embeddings](http://nlp.stanford.edu/data/glove.6B.zip) and uncompress. Modify the "vocab_emb_init_path" field in the file `./settings/vocabulary.json` from `"vocab_emb_init_path": "../../vocab/glove.6B.100d.txt"` to `"vocab_emb_init_path": "glove.6B.100d.txt"`.
+5. Download the [GloVe embeddings](http://nlp.stanford.edu/data/glove.6B.zip) and uncompress. Modify the "vocab_emb_init_path" field in the file `./settings/vocabulary.json` from `"vocab_emb_init_path": "../../vocab/glove.6B.100d.txt"` to `"vocab_emb_init_path": "glove.6B.100d.txt"`.
     ```
     $ wget http://nlp.stanford.edu/data/glove.6B.zip
     $ unzip glove.6B.zip
     $ rm glove.6B.zip
     ```
     
-5. Create a vocabulary file from `./train_data/train.Ndocument` and `./train_data/train.Nsummary`. Words appearing less than 5 times are excluded.
+6. Create a vocabulary file from `./train_data/train.Ndocument` and `./train_data/train.Nsummary`. Words appearing less than 5 times are excluded.
     ```
     $ python get_vocab.py my_vocab
     ```
     
-6. Modify the path to the vocabulary file in `train.py` from `Vocab_Giga = loadFromPKL('../../dataset/gigaword_eng_5/giga_new.Vocab')` to `Vocab_Giga = loadFromPKL('my_vocab.Vocab')`.
+7. Modify the path to the vocabulary file in `train.py` from `Vocab_Giga = loadFromPKL('../../dataset/gigaword_eng_5/giga_new.Vocab')` to `Vocab_Giga = loadFromPKL('my_vocab.Vocab')`.
 
-7. To train the model, run the below command. 
+8. To train the model, run the below command. 
     ```
     $ THEANO_FLAGS='floatX=float32' python train.py
     ```
@@ -147,7 +146,7 @@ $ pip install pyrouge
     
     You can modify the 'network' field of the `options_loader.py` from `'settings/network_struct_edge.json'` to `'./settings/network_struct_node.json'` to train the "2way+word" architecture.
     
-    The training will stop when it reaches 30 epoches. The max number of epoches can be modified by changing the `"max_epochs"` field in `./settings/training.json`.
+    You can disable early stopping by setting `"sample":false` in `./setttings/earlyStop.json`. The training will stop when it reaches the maximum number of epoches (30 epoches). This can be modified by changing the `"max_epochs"` field in `./settings/training.json`.
 
 ## I Want to Apply the Coverage Mechanism in a 2nd Training Stage..
 
