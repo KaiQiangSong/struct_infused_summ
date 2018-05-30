@@ -1,0 +1,15 @@
+{
+	"primary_dir":"../../dataset/",
+	"datasetName":"gigaword_eng_5",
+	"subsets":["trainSet","validSet","validNewSet","testSet","testNewSet","testValidSet","duc2004"],
+	"trainSet":"train",
+	"validSet":"valid2",
+	"validNewSet":"valid3",
+	"OriginalTestSet":"test",
+	"testSet":"test2",
+	"testNewSet":"test3",
+	"testValidSet":"testValid",
+	"duc2004":"ducTest",
+	"dataset_loading_method":"load",
+	"dataset_saving_address":"../../dataset/gigaword_eng_5/dataset.pkl"
+}

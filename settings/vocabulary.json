@@ -1,0 +1,11 @@
+{
+    "vocab_size": 148, 
+    "vocab_emb_init_path": "../../vocab/glove.6B.100d.txt", 
+    "vocab_freq_sortedBy": "output", 
+    "vocab_full_size": 148, 
+    "vocab_output_size": 148, 
+    "vocab_minFreq": 5, 
+    "vocab_input_size": 148, 
+    "vocab_cased": false, 
+    "vocab_emb_dim": 100
+}

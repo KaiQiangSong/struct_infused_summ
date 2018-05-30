@@ -1,0 +1,18 @@
+{
+	"featList":["pos_map","inArc_map","outArc","depth_d"],
+	"pos_map_init_method":"random",
+	"depth_c_init_method":"random",
+	"inArc_map_init_method":"random",
+	"outArc_init_method":"random",
+	"depth_d_init_method":"random",
+	"pos_map_dim":16,
+	"depth_c_dim":16,
+	"inArc_map_dim":16,
+	"outArc_dim":16,
+	"depth_d_dim":16,
+	"pos_map_num":72,
+	"depth_c_num":47,
+	"inArc_map_num":40,
+	"outArc_num":60,
+	"depth_d_num":20
+}

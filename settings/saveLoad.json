@@ -1,0 +1,7 @@
+{
+	"model_path":"./model/",
+	"reload":false,
+	"reload_options":"options_epoch_20.json",
+	"save":true,
+	"SaveEachEpoch":true
+}

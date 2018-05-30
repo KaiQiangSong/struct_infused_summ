@@ -1,0 +1,10 @@
+{
+	"sample":true,
+	"sampleMin":10000,
+	"sampleFreq":2000,
+	"sample_path":"./sample/",
+	"earlyStop":true,
+	"earlyStop_method":"valid_err",
+	"earlyStop_bound":62000,
+	"rate_bound":24000
+}

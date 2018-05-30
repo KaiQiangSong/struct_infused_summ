@@ -1,0 +1,6 @@
+{
+	"dtype_float_numpy":"np.float32",
+	"dtype_float_theano":"'float32'",
+	"dtype_int_numpy":"np.int64",
+	"dtype_int_theano":"'int64'"
+}

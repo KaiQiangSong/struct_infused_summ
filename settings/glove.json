@@ -1,0 +1,9 @@
+{
+	"Generate_Method":"Vocab_loadFromGlove",
+	"glove_filename":"../../vocab/glove_6B_100d_uncased.vocab",
+	"vocab_size":5000,
+	"vocab_full_size":106372,
+	"unk_switch":0,
+	"unk_select":0,
+	"emb_dim":100
+}

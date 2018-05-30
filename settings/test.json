@@ -1,0 +1,6 @@
+{
+    "generation_method":"bfs_beam",
+    "beam_size":5,
+    "apply_bigram_trick":false,
+    "gamma":100.0
+}
