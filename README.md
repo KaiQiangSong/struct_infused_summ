@@ -1,6 +1,6 @@
 # Structure-Infused Copy Mechanisms for Abstractive Summarization
 
-We provide the source code for the paper **"Structure-Infused Copy Mechanisms for Abstractive Summarization"**, accepted at COLING'18. If you find the code useful, please cite the following paper. 
+We provide the source code for the paper **"[Structure-Infused Copy Mechanisms for Abstractive Summarization](http://www.cs.ucf.edu/~feiliu/papers/COLING2018_StructSumm.pdf)"**, accepted at COLING'18. If you find the code useful, please cite the following paper. 
 
     @inproceedings{song-zhao-liu:2018,
      Author = {Kaiqiang Song and Lin Zhao and Fei Liu},
