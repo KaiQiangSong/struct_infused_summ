@@ -123,12 +123,13 @@ $ pip install pyrouge
     
     After that, you need to modify the "dataset" field of the `options_loader.py` file to point to the new settings file: `'dataset':'settings/my_train_settings.json'`.
 
-5. Download the [GloVe embeddings](http://nlp.stanford.edu/data/glove.6B.zip) and uncompress. Modify the "vocab_emb_init_path" field in the file `./settings/vocabulary.json` from `"vocab_emb_init_path": "../../vocab/glove.6B.100d.txt"` to `"vocab_emb_init_path": "glove.6B.100d.txt"`.
+5. Download the [GloVe embeddings](http://nlp.stanford.edu/data/glove.6B.zip) and uncompress. 
     ```
     $ wget http://nlp.stanford.edu/data/glove.6B.zip
     $ unzip glove.6B.zip
     $ rm glove.6B.zip
     ```
+    Modify the "vocab_emb_init_path" field in the file `./settings/vocabulary.json` from `"vocab_emb_init_path": "../../vocab/glove.6B.100d.txt"` to `"vocab_emb_init_path": "glove.6B.100d.txt"`.
     
 6. Create a vocabulary file from `./train_data/train.Ndocument` and `./train_data/train.Nsummary`. Words appearing less than 5 times are excluded.
     ```
