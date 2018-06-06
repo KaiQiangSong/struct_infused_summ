@@ -44,9 +44,9 @@ def bfs_beam_search(encoder, encoderInputs, decoder, otherInputs, Vocab, options
     
     # Generate Natural Language
     if options['apply_bigram_trick']:
-        startState = (0, [0], start_state_pass, set())
+        startState = (0, [(0,'<s>')], start_state_pass, set())
     else:
-        startState = (0, [0], start_state_pass)
+        startState = (0, [(0,'<s>')], start_state_pass)
         
     n_states, n_cand, n_top = (1, 1, 0)
     
@@ -64,22 +64,23 @@ def bfs_beam_search(encoder, encoderInputs, decoder, otherInputs, Vocab, options
                 score, sequence, previous_state = currentState
             
             if options["Structure_aviliable"]:
-                inps = getInputs(sequence[-1], previous_state, state_below, inputMask, otherInputs, options, input_embedding = input_embedding, struct_below = struct_below)
+                inps = getInputs_new(sequence[-1], previous_state, state_below, inputMask, otherInputs, options, input_embedding = input_embedding, struct_below = struct_below)
             else:
-                inps = getInputs(sequence[-1], previous_state, state_below, inputMask, otherInputs, options)
+                inps = getInputs_new(sequence[-1], previous_state, state_below, inputMask, otherInputs, options)
                 
             outps = decoder(*inps)
-            state_pass, dist = outps[:-1], outps[-1]
+            state_pass, dist, posi = outps[:-2], outps[-2], outps[-1]
             dist = dist.flatten()
             state_pass = [s[-1] for s in state_pass]
             
             dist = np.log(dist + 1e-8)
             if options['apply_bigram_trick']:
-                dist, indexes, bi_new = biGramTrick_new(dist, sequence[-1], bi_in, bi_old, options, batch_vocab)
+                dist, indexes, bi_new = biGramTrick_new(dist, sequence[-1][0], bi_in, bi_old, options, batch_vocab)
             else:
                 indexes = topKIndexes(dist, options['beam_size'])
                 dist = dist[indexes].flatten()
             dist = -dist + score
+            att = posi.flatten()
                 
             '''
             # BiGram Trick
@@ -99,9 +100,9 @@ def bfs_beam_search(encoder, encoderInputs, decoder, otherInputs, Vocab, options
             '''
             
             if options['apply_bigram_trick']:        
-                nextStates = [(dist[Index], sequence+[batch_vocab[int(indexes[Index])]], state_pass, copy.deepcopy(bi_new[Index])) for Index in range(dist.shape[0])]
+                nextStates = [(dist[Index], sequence+[(batch_vocab[int(indexes[Index])], att)], state_pass, copy.deepcopy(bi_new[Index])) for Index in range(dist.shape[0])]
             else:
-                nextStates = [(dist[Index], sequence+[batch_vocab[int(indexes[Index])]], state_pass) for Index in range(dist.shape[0])]
+                nextStates = [(dist[Index], sequence+[(batch_vocab[int(indexes[Index])], att)], state_pass) for Index in range(dist.shape[0])]
             
             bestNextStates += nextStates
             n_states += len(nextStates)

@@ -17,15 +17,15 @@ from options_loader import *
 from optimizer import *
 
 
-def summarize(encoder, encoderInputs, decoder,  otherInputs, Vocab, options, log):
+def summarize(encoder, encoderInputs, decoder,  otherInputs, OriginalText, Vocab, options, log):
     result, time_data = gen_sample(encoder, encoderInputs, decoder, otherInputs, Vocab, options, log)
     result = sorted(result, key = lambda x:x[0])
     #print result[0][1][1:]
-    sentence = translateSequence(result[0][1][1:], Vocab, options) 
+    sentence = translateSequence_new(result[0][1][1:], OriginalText, Vocab, options)
     #print sentence
     return sentence, time_data
 
-def test_once(dataset, encoder, decoder, Vocab, options, log):
+def test_once(dataset, encoder, decoder, OriginalText, Vocab, options, log):
     data = dataset[0]
     print len(dataset), len(dataset[0]), len(dataset[1]), len(dataset[2])
     
@@ -52,7 +52,7 @@ def test_once(dataset, encoder, decoder, Vocab, options, log):
         otherInputs['pointer'] = inps[3]
         otherInputs['parent'] = inps[5]
         
-        summary_i, time_data_i = summarize(encoder, [inp for inp in encoderInputs if inp is not None], decoder, otherInputs, Vocab, options, log)
+        summary_i, time_data_i = summarize(encoder, [inp for inp in encoderInputs if inp is not None], decoder, otherInputs, OriginalText[i], Vocab, options, log)
         reference_i = ListOfIndex2Sentence(cutDown(batchedData[1][0][1:]),Vocab,options)
         document_i = ListOfIndex2Sentence(batchedData[0][0], Vocab, options)
         
@@ -102,7 +102,7 @@ def prepare(optionName, modelName, dataset, testSet, Vocab, I2Es, log):
     
     return testData, encoder, decoder, options
 
-def generate(prefix, testData, encoder, decoder, Vocab, options, log, beam_size = 5, bigramTrick = False, gamma = 7):
+def generate(prefix, testData, encoder, decoder, OrignialText, Vocab, options, log, beam_size = 5, bigramTrick = False, gamma = 7):
     log.log('Using Beam_Search')
     if len(testData[0]) != 500:
         options['generation_method'] = 'bfs_beam'
@@ -114,13 +114,21 @@ def generate(prefix, testData, encoder, decoder, Vocab, options, log, beam_size 
     options["training"] = False
     options["test"] = True
     
-    document, reference, summary, time_data, time_avg = test_once(testData, encoder, decoder, Vocab, options, log)
+    document, reference, summary, time_data, time_avg = test_once(testData, encoder, decoder, OrignialText, Vocab, options, log)
     
     writeFile(prefix + '.document', document)
     writeFile(prefix + '.reference', reference)
     writeFile(prefix + '.summary', summary)
     writeFile(prefix + '.counts', time_data)
 
+def loadFromText(fName):
+    f = codecs.open(fName,'r',encoding = 'utf-8')
+    result = []
+    for l in f:
+        line = l.strip().split()
+        result.append(line)
+    return result
+    
     
 if __name__ == '__main__':
     log = mylog()
@@ -144,10 +152,10 @@ if __name__ == '__main__':
     optionName = './model/struct_edge/options_check2_best.json'
     modelName = './model/struct_edge/model_check2_best.npz'
     for part in dataoptions['subsets']:
-        
+        OrignialText = loadFromText(dataoptions['primary_dir']+dataoptions[part]+'.Ndocument') 
         Index += 1
         log.log('Testing %d th model'%(Index))
         testData, encoder, decoder, options = prepare(optionName, modelName, dataset, part , Vocab, I2Es, log)
-        generate(part+'.result', testData, encoder, decoder, Vocab, options, log, beam_size = 5, bigramTrick=True, gamma = 13.284)
+        generate(part+'.result', testData, encoder, decoder, OrignialText, Vocab, options, log, beam_size = 5, bigramTrick=True, gamma = 13.284)
         
     log.log('Finish Testing')

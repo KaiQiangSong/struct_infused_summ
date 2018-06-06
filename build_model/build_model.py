@@ -401,7 +401,7 @@ def build_sampler(params_shared, options):
     else:
         prob = vocab_
         
-    outps += [prob]
+    outps += [prob, posi_]
     outps_avil = [item for item in outps if item is not None]
 
     decoder = theano.function(inputs = inps_avil,

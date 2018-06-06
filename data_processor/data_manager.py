@@ -5,6 +5,7 @@ import numpy as np
 import copy
 
 from sets import Set
+from utility.utility import *
 
 #from mylog.mylog import mylog
 
@@ -587,6 +588,35 @@ def translateSequence(sequence, Vocab, options):
         sentence += word + ' '
     return sentence
 
+def translateSequence_new(sequence, OriginalText, Vocab, options):
+    sentence = ''
+    for item in sequence:
+        if item[0] == 1:
+            break
+        if item[0] == 0:
+            att = int(item[1].argmax())
+            word = OriginalText[att]
+        else:  
+            word = Vocab['i2w'][item[0]]
+            if '#' in word:
+                cands = []
+                Index = 0
+                for token in OriginalText:
+                    if remove_digits(token).lower() == word:
+                        cands += [Index]
+                    Index += 1
+                if Index != 0:
+                    bestScore = 0.0
+                    bestCand = 0
+                    for cand in cands:
+                        if float(item[1][cand]) > bestScore:
+                            bestScore = float(item[1][cand])
+                            bestCand = cand
+                    word = OriginalText[bestCand]
+        word = word.lower()
+        sentence += word + ' '
+    return sentence
+
 def getInputs(word_input, previous_state, state_below, mask_below, otherInputs, options, input_embedding = None, struct_below = None):
     decoder_setting = options['decoder']
     
@@ -594,6 +624,32 @@ def getInputs(word_input, previous_state, state_below, mask_below, otherInputs, 
     inps = []
     # word_input
     inps += [word_input]
+    # feature
+    if options["Structure_aviliable"]:
+        inps += [input_embedding, struct_below]
+        if options["Parent_aviliable"]:
+            inps += [otherInputs['parent']]
+    # h_init, c_init
+    inps += [previous_state[0], previous_state[1]]
+    # state_below, mask_below:
+    if options["Attention_aviliable"]:
+        inps += [state_below, mask_below]
+    # batch_vocab, pointer
+    if options["LVT_aviliable"]:
+        inps+= [otherInputs['batch_vocab'], otherInputs['pointer']]
+    # hs_init, cs_init
+    if decoder_setting['type'] == 'struct_fei_decoder':
+        inps += [previous_state[2], previous_state[3]]
+        
+    return inps
+
+def getInputs_new(word_input, previous_state, state_below, mask_below, otherInputs, options, input_embedding = None, struct_below = None):
+    decoder_setting = options['decoder']
+    
+    # Deal with inputs
+    inps = []
+    # word_input
+    inps += [word_input[0]]
     # feature
     if options["Structure_aviliable"]:
         inps += [input_embedding, struct_below]
@@ -635,7 +691,34 @@ def biGramTrick(dist, word_input, bi_in, bi_old, options, batch_vocab = None):
     dist = dist[indexes]
     dist = dist + options['gamma'] * trick_item
     return dist, indexes, bi_next
-
+'''
+def biGramTrick_new(dist, word_input, bi_in, bi_old, options, batch_vocab = None):
+    ratio = options['gamma'] / (len(bi_in) + 1e-8)
+    indexes = topKIndexes(dist, options['beam_size'], ratio)
+    
+    if batch_vocab is None:
+        batch_vocab = np.arange(options['decoder']['_softmax']['n_out'], dtype = np.int64)
+    
+    #print type(indexes), type(batch_vocab)
+    #print indexes
+    #print batch_vocab
+    
+    bi_new = [(word_input, word) for word in batch_vocab[indexes].flatten().tolist()]
+    
+    trick_item = [int((biGram in bi_in) & (biGram not in bi_old)) for biGram in bi_new]
+    trick_item = np.asarray(trick_item, dtype = np.float32) 
+    
+    dist = dist[indexes].flatten()
+    dist += ratio * trick_item
+    
+    newIndexes = topKIndexes(dist, options['beam_size'])
+    indexes = indexes[newIndexes].flatten()
+    dist = dist[newIndexes].flatten()
+    bi_new = [bi_new[id] for id in newIndexes.tolist()]
+    bi_next = [copy.deepcopy(bi_old).union(biGram) if ((biGram in bi_in) & (biGram not in bi_old)) else copy.deepcopy(bi_old) for biGram in bi_new]
+    
+    return dist, indexes, bi_next 
+'''
 def biGramTrick_new(dist, word_input, bi_in, bi_old, options, batch_vocab = None):
     ratio = options['gamma'] / (len(bi_in) + 1e-8)
     indexes = topKIndexes(dist, options['beam_size'], ratio)
