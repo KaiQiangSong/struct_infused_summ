@@ -80,10 +80,8 @@ $ pip install pyrouge
     $ python generate.py
     ```
 
-    `struct_edge` is the default model. It corresponds to the "2way+relation" architecture described in the paper. You can modify the file `generate.py` (Line 144-145) by globally replacing `struct_edge` with `struct_node` to enable the "2way+word" architecture.
+    `struct_edge` is the default model. It corresponds to the "2way+relation" architecture described in the paper. You can modify the file `generate.py` (Line 152-153) by globally replacing `struct_edge` with `struct_node` to enable the "2way+word" architecture.
     
-    In the generated summaries, the "\<unk\>" symbol represents an unknown word; it is often a source word not included in the input vocabulary (containing 70K words). "#.##" represents numbers of the form "3.14".
-
 ## I Want to Train the Model..
 
 1. Create a folder to save the model files. `./model/struct_node` is for the "2way+word" architecture and `./model/struct_edge` for the "2way+relation" architecture. 
