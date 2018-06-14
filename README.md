@@ -15,6 +15,10 @@ We provide the source code for the paper **"[Structure-Infused Copy Mechanisms f
 
 * The code takes as input a text file with one sentence per line. It generates a text file in the same directory as the output, ended with "**.result.summary**", where each source sentence is replaced by a title-like summary.
 
+    EXAMPLE INPUT: An estimated 4,645 people died in Hurricane Maria and its aftermath in Puerto Rico , according to an academic report published Tuesday in a prestigious medical journal .
+
+    EXAMPLE OUTPUT: hurricane maria kills 4,645 in puerto rico .
+
 ## Dependencies
 
 The code is written in Python (v2.7) and Theano (v1.0.1). We suggest the following environment:
