@@ -12,7 +12,7 @@ optionsFrame = {
     'dataType':'settings/dType.json',
     'training':'settings/training.json',
     'test':'settings/test.json',
-    'dataset':'settings/trainDataSetting.json',
+    'dataset':'settings/my_test_settings.json',
     'network':'settings/network_struct_edge.json',
     'saveLoad':'settings/saveLoad.json',
     'earlyStop':'settings/earlyStop.json',
