@@ -148,20 +148,22 @@ $ pip install pyrouge
     
     The training program stops when it reaches the maximum number of epoches (30 epoches). This number can be modified by changing the `"max_epochs"` field in `./settings/training.json`. The model files are saved in folder `./model/`.
     
-    You might want to change the paramters used for early stopping. These are specified in `./setttings/earlyStop.json` and illustrated below. If early stopping is enabled, the best model files, `model_best.npz` and `options_best.json`, will be saved in the `./model/struct_edge/` folder.
-    
     "2way+relation" is the default architecture. It uses the settings file `./settings/network_struct_edge.json`. You can modify the 'network' field of the `options_loader.py` from `'settings/network_struct_edge.json'` to `'./settings/network_struct_node.json'` to train the "2way+word" architecture.
+    
+9. Train the model with early stopping.
+    
+    You might want to change the paramters used for early stopping. These are specified in `./setttings/earlyStop.json` and explained below. If early stopping is enabled, the best model files, `model_best.npz` and `options_best.json`, will be saved in the `./model/struct_edge/` folder.
     
 ```
 {
 	"sample":true, # enable model checkpoint
 	"sampleMin":10000, # the first checkpoint occurs after 10K batches
-	"sampleFreq":2000, # afterwards, there is a checkpoint every 2K batches
+	"sampleFreq":2000, # there is a checkpoint every 2K batches afterwards
 	"sample_path":"./sample/",
 	"earlyStop":true, # enable early stopping 
 	"earlyStop_method":"valid_err", # based on validation loss
-	"earlyStop_bound":62000, # if the valid loss has no improvement after 62K batches, the training program stops
-	"rate_bound":24000 # if the valid loss has no improvement after 2K batches, halve the learning rate
+	"earlyStop_bound":62000, # the training program stops if the valid loss has no improvement after 62K batches
+	"rate_bound":24000 # halve the learning rate if the valid loss has no improvement after 2K batches
 }
 ```
 
