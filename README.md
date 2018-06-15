@@ -150,7 +150,7 @@ $ pip install pyrouge
     
     "2way+relation" is the default architecture. It uses the settings file `./settings/network_struct_edge.json`. You can modify the 'network' field of the `options_loader.py` from `'settings/network_struct_edge.json'` to `'./settings/network_struct_node.json'` to train the "2way+word" architecture.
     
-9. Train the model with early stopping.
+9. (Optional) train the model with early stopping.
     
     You might want to change the paramters used for early stopping. These are specified in `./setttings/earlyStop.json` and explained below. If early stopping is enabled, the best model files, `model_best.npz` and `options_best.json`, will be saved in the `./model/struct_edge/` folder.
     
