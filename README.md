@@ -141,33 +141,31 @@ $ pip install pyrouge
     
 7. Modify the path to the vocabulary file in `train.py` from `Vocab_Giga = loadFromPKL('../../dataset/gigaword_eng_5/giga_new.Vocab')` to `Vocab_Giga = loadFromPKL('my_vocab.Vocab')`.
 
-8. Modify the settings about training strategies with the file `settings/earlyStop.json`:
-
-```
-{
-	"sample":true, #Enable Checkpoint
-	"sampleMin":10000, #The initial CheckPoint(after 10k batches)
-	"sampleFreq":2000, #The frequency of CheckPoint(after each 2k batches)
-	"sample_path":"./sample/",
-	"earlyStop":true, #Enable EarlyStop
-	"earlyStop_method":"valid_err",
-	"earlyStop_bound":62000, #The Boundary for earlyStop(If after 62k batches, no updates with validation error, the program should stop)
-	"rate_bound":24000 #The Boundary for cut into half the learning rate(If ater 24k batches, no updates with validation error, the learning rate should cut into half)
-}
-```
-You may need to change the 4 numbers based on you dataset.
-HINT* A good number for `earlyStop_bound` is the number of batches in one epoch, A good number for `rate_Bound` should less than the 50% of `earlyStop_bound`.
-
-9. To train the model, run the below command. 
+8. To train the model, run the below command. 
     ```
     $ THEANO_FLAGS='floatX=float32' python train.py
     ```
     
-    By default, the training program stops when it reaches the maximum number of epoches (30 epoches). This number can be modified by changing the `"max_epochs"` field in `./settings/training.json`. If you would like to enable early stopping, you need to modify parameters in `./setttings/earlyStop.json`, changing `"sample":false` to `"sample":true` and modifying other options controling .
+    The training program stops when it reaches the maximum number of epoches (30 epoches). This number can be modified by changing the `"max_epochs"` field in `./settings/training.json`. The model files are saved in folder `./model/`.
     
-    Two files, `model_best.npz` and `options_best.json`, will be saved in the `./model/struct_edge/` folder. "2way+relation" is the default architecture. It uses the settings file `./settings/network_struct_edge.json`. 
+    You might want to change the paramters used for early stopping. These are specified in `./setttings/earlyStop.json` and illustrated below. If early stopping is enabled, the best model files, `model_best.npz` and `options_best.json`, will be saved in the `./model/struct_edge/` folder.
     
-    You can modify the 'network' field of the `options_loader.py` from `'settings/network_struct_edge.json'` to `'./settings/network_struct_node.json'` to train the "2way+word" architecture.
+    "2way+relation" is the default architecture. It uses the settings file `./settings/network_struct_edge.json`. You can modify the 'network' field of the `options_loader.py` from `'settings/network_struct_edge.json'` to `'./settings/network_struct_node.json'` to train the "2way+word" architecture.
+    
+```
+{
+	"sample":true, # enable model checkpoint
+	"sampleMin":10000, # the first checkpoint occurs after 10K batches
+	"sampleFreq":2000, # afterwards, there is a checkpoint every 2K batches
+	"sample_path":"./sample/",
+	"earlyStop":true, # enable early stopping 
+	"earlyStop_method":"valid_err", # based on validation loss
+	"earlyStop_bound":62000, # if the valid loss has no improvement after 62K batches, the training program stops
+	"rate_bound":24000 # if the valid loss has no improvement after 2K batches, halve the learning rate
+}
+```
+
+62K batches (used for `earlyStop_bound`) correspond to about 1 epoch for our dataset. 24K batches (used for `rate_Bound`) is slightly less than half of an epoch.
    
 
 ## I Want to Apply the Coverage Mechanism in a 2nd Training Stage..
