@@ -111,7 +111,7 @@ def bfs_beam_search(encoder, encoderInputs, decoder, otherInputs, Vocab, options
         n_new = 0
         newCandidates = []
         for i in range(0, len(bestNextStates)):
-            if (bestNextStates[i][1][-1] == 1):
+            if (bestNextStates[i][1][-1][0] == 1):
                 n_top += 1
                 TopKStates.append(bestNextStates[i])
                 if n_top >= options['beam_size']:

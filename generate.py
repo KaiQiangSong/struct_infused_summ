@@ -20,7 +20,7 @@ from optimizer import *
 def summarize(encoder, encoderInputs, decoder,  otherInputs, OriginalText, Vocab, options, log):
     result, time_data = gen_sample(encoder, encoderInputs, decoder, otherInputs, Vocab, options, log)
     result = sorted(result, key = lambda x:x[0])
-    #print result[0][1][1:]
+    #print [it[0] for it in result[0][1][1:]]
     sentence = translateSequence_new(result[0][1][1:], OriginalText, Vocab, options)
     #print sentence
     return sentence, time_data

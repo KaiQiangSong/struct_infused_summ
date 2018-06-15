@@ -691,34 +691,7 @@ def biGramTrick(dist, word_input, bi_in, bi_old, options, batch_vocab = None):
     dist = dist[indexes]
     dist = dist + options['gamma'] * trick_item
     return dist, indexes, bi_next
-'''
-def biGramTrick_new(dist, word_input, bi_in, bi_old, options, batch_vocab = None):
-    ratio = options['gamma'] / (len(bi_in) + 1e-8)
-    indexes = topKIndexes(dist, options['beam_size'], ratio)
-    
-    if batch_vocab is None:
-        batch_vocab = np.arange(options['decoder']['_softmax']['n_out'], dtype = np.int64)
-    
-    #print type(indexes), type(batch_vocab)
-    #print indexes
-    #print batch_vocab
-    
-    bi_new = [(word_input, word) for word in batch_vocab[indexes].flatten().tolist()]
-    
-    trick_item = [int((biGram in bi_in) & (biGram not in bi_old)) for biGram in bi_new]
-    trick_item = np.asarray(trick_item, dtype = np.float32) 
-    
-    dist = dist[indexes].flatten()
-    dist += ratio * trick_item
-    
-    newIndexes = topKIndexes(dist, options['beam_size'])
-    indexes = indexes[newIndexes].flatten()
-    dist = dist[newIndexes].flatten()
-    bi_new = [bi_new[id] for id in newIndexes.tolist()]
-    bi_next = [copy.deepcopy(bi_old).union(biGram) if ((biGram in bi_in) & (biGram not in bi_old)) else copy.deepcopy(bi_old) for biGram in bi_new]
-    
-    return dist, indexes, bi_next 
-'''
+
 def biGramTrick_new(dist, word_input, bi_in, bi_old, options, batch_vocab = None):
     ratio = options['gamma'] / (len(bi_in) + 1e-8)
     indexes = topKIndexes(dist, options['beam_size'], ratio)
