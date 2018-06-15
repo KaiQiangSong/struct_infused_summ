@@ -141,7 +141,24 @@ $ pip install pyrouge
     
 7. Modify the path to the vocabulary file in `train.py` from `Vocab_Giga = loadFromPKL('../../dataset/gigaword_eng_5/giga_new.Vocab')` to `Vocab_Giga = loadFromPKL('my_vocab.Vocab')`.
 
-8. To train the model, run the below command. 
+8. Modify the settings about training strategies with the file `settings/earlyStop.json`:
+
+```
+{
+	"sample":true, #Enable Checkpoint
+	"sampleMin":10000, #The initial CheckPoint(after 10k batches)
+	"sampleFreq":2000, #The frequency of CheckPoint(after each 2k batches)
+	"sample_path":"./sample/",
+	"earlyStop":true, #Enable EarlyStop
+	"earlyStop_method":"valid_err",
+	"earlyStop_bound":62000, #The Boundary for earlyStop(If after 62k batches, no updates with validation error, the program should stop)
+	"rate_bound":24000 #The Boundary for cut into half the learning rate(If ater 24k batches, no updates with validation error, the learning rate should cut into half)
+}
+```
+You may need to change the 4 numbers based on you dataset.
+HINT* A good number for `earlyStop_bound` is the number of batches in one epoch, A good number for `rate_Bound` should less than the 50% of `earlyStop_bound`.
+
+9. To train the model, run the below command. 
     ```
     $ THEANO_FLAGS='floatX=float32' python train.py
     ```
