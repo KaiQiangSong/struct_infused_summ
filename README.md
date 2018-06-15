@@ -146,11 +146,12 @@ $ pip install pyrouge
     $ THEANO_FLAGS='floatX=float32' python train.py
     ```
     
+    By default, the training program stops when it reaches the maximum number of epoches (30 epoches). This number can be modified by changing the `"max_epochs"` field in `./settings/training.json`. If you would like to enable early stopping, you need to modify parameters in `./setttings/earlyStop.json`, changing `"sample":false` to `"sample":true` and modifying other options controling .
+    
     Two files, `model_best.npz` and `options_best.json`, will be saved in the `./model/struct_edge/` folder. "2way+relation" is the default architecture. It uses the settings file `./settings/network_struct_edge.json`. 
     
     You can modify the 'network' field of the `options_loader.py` from `'settings/network_struct_edge.json'` to `'./settings/network_struct_node.json'` to train the "2way+word" architecture.
-    
-    You can disable early stopping by setting `"sample":false` in `./setttings/earlyStop.json`. The training will stop when it reaches the maximum number of epoches (30 epoches). This can be modified by changing the `"max_epochs"` field in `./settings/training.json`.
+   
 
 ## I Want to Apply the Coverage Mechanism in a 2nd Training Stage..
 
