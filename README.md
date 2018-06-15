@@ -15,6 +15,11 @@ We provide the source code for the paper **"[Structure-Infused Copy Mechanisms f
 
 * The code takes as input a text file with one sentence per line. It generates a text file in the same directory as the output, ended with "**.result.summary**", where each source sentence is replaced by a title-like summary.
 
+* Example input and output are shown below. 
+  > An estimated 4,645 people died in Hurricane Maria and its aftermath in Puerto Rico , according to an academic report published Tuesday in a prestigious medical journal .
+
+  > hurricane maria kills 4,645 in puerto rico .
+
 ## Dependencies
 
 The code is written in Python (v2.7) and Theano (v1.0.1). We suggest the following environment:
@@ -80,10 +85,8 @@ $ pip install pyrouge
     $ python generate.py
     ```
 
-    `struct_edge` is the default model. It corresponds to the "2way+relation" architecture described in the paper. You can modify the file `generate.py` (Line 144-145) by globally replacing `struct_edge` with `struct_node` to enable the "2way+word" architecture.
+    `struct_edge` is the default model. It corresponds to the "2way+relation" architecture described in the paper. You can modify the file `generate.py` (Line 152-153) by globally replacing `struct_edge` with `struct_node` to enable the "2way+word" architecture.
     
-    In the generated summaries, the "\<unk\>" symbol represents an unknown word; it is often a source word not included in the input vocabulary (containing 70K words). "#.##" represents numbers of the form "3.14".
-
 ## I Want to Train the Model..
 
 1. Create a folder to save the model files. `./model/struct_node` is for the "2way+word" architecture and `./model/struct_edge` for the "2way+relation" architecture. 
