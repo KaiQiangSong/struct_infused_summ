@@ -20,6 +20,7 @@ We provide the source code for the paper **"[Structure-Infused Copy Mechanisms f
 
   > hurricane maria kills 4,645 in puerto rico .
 
+## A Quick Demo
 
 ![Demo of Sentence Summarizer](http://cs.ucf.edu/~feiliu/summarizer_demo.gif)
 
