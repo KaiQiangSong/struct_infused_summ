@@ -20,6 +20,11 @@ We provide the source code for the paper **"[Structure-Infused Copy Mechanisms f
 
   > hurricane maria kills 4,645 in puerto rico .
 
+
+![Demo of Sentence Summarizer](https://github.com/KaiQiangSong/struct_infused_summ)
+
+
+
 ## Dependencies
 
 The code is written in Python (v2.7) and Theano (v1.0.1). We suggest the following environment:
